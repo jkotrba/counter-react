@@ -6,29 +6,18 @@ import { addAction } from './redux/actions'
 
 class Counter extends React.Component {
 
-  componentDidMount() {
-  }
-
-  onIncrementClicked = event => {
-    this.props.dispatch(addAction(1))
-  }
-
-  onDecrementClicked = event => {
-    this.props.dispatch(addAction(-1))
-  }
-
   render() {
     return (
       <div className="counter">
         <CounterDisplay count={this.props.count} />
         <div className="buttons">
           <div>
-            <button onClick={this.onIncrementClicked}>
+            <button onClick={this.props.onIncrementClicked}>
               <i className="fa fa-plus" />
             </button>
           </div>
           <div>
-            <button onClick={this.onDecrementClicked}>
+            <button onClick={() => this.props.onDecrementClicked(this.props.count)}>
               <i className="fa fa-minus" />
             </button>
           </div>
@@ -44,4 +33,18 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps)(Counter)
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    onIncrementClicked: () => dispatch(addAction(1)),
+    onDecrementClicked: (count) => {
+      if (ownProps.allowDecrement && (count > 0 || ownProps.allowNegative)) {
+        dispatch(addAction(-1))
+      }
+    }
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Counter)
