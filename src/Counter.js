@@ -2,7 +2,7 @@ import React from 'react'
 import CounterDisplay from './CounterDisplay'
 import { connect } from 'react-redux'
 import './Counter.css'
-import { addAction } from './redux/actions'
+import { addAction, addActionAsync } from './redux/actions'
 
 class Counter extends React.Component {
 
@@ -15,9 +15,15 @@ class Counter extends React.Component {
             <button onClick={this.props.onIncrementClicked}>
               <i className="fa fa-plus" />
             </button>
+            <button onClick={this.props.onIncrementAsyncClicked}>
+              <i className="fa fa-plus" />
+            </button>
           </div>
           <div>
             <button onClick={() => this.props.onDecrementClicked(this.props.count)}>
+              <i className="fa fa-minus" />
+            </button>
+            <button onClick={this.props.onDecrementAsyncClicked}>
               <i className="fa fa-minus" />
             </button>
           </div>
@@ -40,7 +46,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       if (ownProps.allowDecrement && (count > 0 || ownProps.allowNegative)) {
         dispatch(addAction(-1))
       }
-    }
+    },
+    onIncrementAsyncClicked: () => dispatch(addActionAsync(1)),
+    onDecrementAsyncClicked: () => dispatch(addActionAsync(-1))
   }
 }
 
